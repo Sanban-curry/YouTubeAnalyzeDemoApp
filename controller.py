@@ -1,11 +1,11 @@
 import models
-
+import  views
 
 def controll(youtube):
-
-    df_video = models.video_search(youtube, 'python', 30) #検索の条件はviewから取得
+    query, threshold = views.views_input()
+    df_video = models.video_search(youtube, query)
     df_data = models.get_channel_info(youtube, df_video)
-    df_extracted = df_data[df_data["subscriber_count"] < number] #numberはviewから取得
+    df_extracted = df_data[df_data["subscriber_count"] < threshold]
     results = models.get_video_info(youtube, df_extracted)
     results = models.change_line(results)
-    print(results)
+    views.view_return(results)

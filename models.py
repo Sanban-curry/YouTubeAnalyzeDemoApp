@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def video_search(youtube, q='自動化', max_results=50):
+def video_search(youtube, q='Python Excel', max_results=50):
 
     response = youtube.search().list(
         q=q,
@@ -35,8 +35,11 @@ def get_channel_info(youtube, df_video):
     sub_graph = []
     for item in sub_list['items']:
         sub = {}
-        sub["channel_id"] = item['id']
-        sub["subscriber_count"] = int(item['statistics']['subscriberCount'])
+        if len(item['statistics']) > 0:
+            sub["channel_id"] = item['id']
+            sub["subscriber_count"] = int(item['statistics']['subscriberCount'])
+        else:
+            sub["channel_id"] = item['id']
         sub_graph.append(sub)
 
     df_sub = pd.DataFrame(sub_graph)
@@ -46,11 +49,10 @@ def get_channel_info(youtube, df_video):
 
 def get_video_info(youtube, df_extracted):
     video_ids = df_extracted['video_id'].tolist()
-
     video_list = youtube.videos().list(
         id=video_ids,
         part="snippet, statistics",
-        fields='items(id, snippet(title), statistics(viewCount))',
+        fields='items(id, snippet(title), statistics(viewCount))'
     ).execute()
 
     video_graph = []

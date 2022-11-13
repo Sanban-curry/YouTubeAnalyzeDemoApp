@@ -1,10 +1,8 @@
 import json
-import pandas as pd
 
 from googleapiclient.discovery import build
 
 import controller
-import  models
 
 with open('secret.json') as f:
     secret = json.load(f)
